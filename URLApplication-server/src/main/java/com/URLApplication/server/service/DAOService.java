@@ -63,8 +63,8 @@ public class DAOService {
 	}
 
 	public void createTableUrl() throws SQLException {
-		String sql = "CREATE TABLE IF NOT EXISTS URL (\n" + "	id BIGINT PRIMARY KEY AUTO_INCREMENT,\n"
-				+ "	tiny_url VARCHAR(7) NOT NULL UNIQUE,\n" + "	url TEXT NOT NULL \n" + ");";
+		String sql = "CREATE TABLE IF NOT EXISTS URL_MAPPING (\n" + "	id BIGINT PRIMARY KEY AUTO_INCREMENT,\n"
+				+ "	tiny_url VARCHAR(10) NOT NULL UNIQUE,\n" + "	url TEXT NOT NULL \n" + ");";
 		Statement stmt = null;
 		try {
 			connection = this.connect();
@@ -87,7 +87,7 @@ public class DAOService {
 			String tinyUrl = getTinyUrl(url);
 			if (!tinyUrl.isEmpty())
 				return tinyUrl;
-			String sql = "INSERT INTO URL(tiny_url,url) VALUES(?,?)";
+			String sql = "INSERT INTO URL_MAPPING(tiny_url,url) VALUES(?,?)";
 			long max = getMaxIdFromUrl();
 			tinyUrl = URLUtil.encode(max + 1);
 			PreparedStatement pstmt = null;
@@ -113,7 +113,7 @@ public class DAOService {
 
 	private long getMaxIdFromUrl() throws SQLException {
 
-		String sql = "SELECT MAX(id) AS max FROM URL;";
+		String sql = "SELECT MAX(id) AS max FROM URL_MAPPING;";
 		long result = 0;
 		PreparedStatement pstmt = null;
 		try {
@@ -137,7 +137,7 @@ public class DAOService {
 		if (url == null || url.isEmpty()) {
 			throw new IllegalArgumentException("Null or Empty Url");
 		}
-		String sql = "SELECT tiny_url from URL where url=?";
+		String sql = "SELECT tiny_url from URL_MAPPING where url=?";
 		String result = "";
 		PreparedStatement pstmt = null;
 		try {
@@ -163,7 +163,7 @@ public class DAOService {
 		if (tinyUrl == null || tinyUrl.isEmpty()) {
 			throw new IllegalArgumentException("Null or Empty Url");
 		}
-		String sql = "SELECT url from URL where tiny_url=?";
+		String sql = "SELECT url from URL_MAPPING where tiny_url=?";
 		String result = "";
 		PreparedStatement pstmt = null;
 		try {
